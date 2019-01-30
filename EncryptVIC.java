@@ -1,18 +1,18 @@
 import java.util.*;
 import java.io.*;
 class VICData 
-	{
-		public String agentID;
-		public String date;
-		public String phrase;
-		public String phraseOriginal;
-		public String anagram;
-		public String message;
-		public String messageOriginal;
+{
+	public String agentID;
+	public String date;
+	public String phrase;
+	public String phraseOriginal;
+	public String anagram;
+	public String message;
+	public String messageOriginal;
 	} // class VICData
 
-class EncryptVIC extends VICOperations
-{
+	class EncryptVIC extends VICOperations
+	{
     public static int     ID_LEN          = 5;   // # of chars in agent ID
     public static int     DATE_LEN        = 6;   // # of chars in date
     public static int     PHRASE_LEN      = 10;  // # letters of phrase to use
@@ -21,7 +21,7 @@ class EncryptVIC extends VICOperations
 
     public static char    SPACE           = (char)32; // space is ASCII 32
     public static boolean DEBUG           = false;    // toggle debug prints
-	
+    
 
        /*---------------------------------------------------------------------
         |  Method readVICData (pathName)
@@ -228,14 +228,38 @@ class EncryptVIC extends VICOperations
 
       	//1. Add ID to the first 5 digits of the date using no-carry addition
       	result=obj2.noCarryAddition(obj1.agentID,obj1.date.substring(0,5));
+      	System.out.println("1."+result);
         // Expand the 5-digit result of (1) to 10 digits, using chain addition
-        result=obj2.chainAddition(result,10);
+      	result=obj2.chainAddition(result,10);
+      	System.out.println("2."+result);
         // Use the phrase to create a digit permutation
-        obj1.phrase = obj2.digitPermutation(obj1.phraseOriginal);
+      	obj1.phrase = obj2.digitPermutation(obj1.phraseOriginal);
+      	System.out.println("3."+obj1.phrase);
         //Add the results of (2) and (3) using no-carry addition.
-        result = obj2.noCarryAddition(result,obj1.phrase);
+      	result = obj2.noCarryAddition(result,obj1.phrase);
+      	System.out.println("4."+result);
 
-        System.out.println("Digit Permutation: "+obj2.digitPermutation(result));
+      	result = obj2.permDigits(result);
+      	System.out.println("5: "+ result);
+
+        //Build a Straddling CheckerBoard
+      	ArrayList<String> res1 = obj2.straddlingCheckerboard(result,obj1.anagram);
+
+        //Process the Message
+      	String mess = obj2.stringModify(obj1.messageOriginal);
+      	String enc="";
+
+        //Encoding the Message
+      	for(int i =0; i<mess.length();i++)
+      	{
+      		enc += res1.get(Character.getNumericValue(mess.charAt(i))-10);
+      	}
+      	System.out.println(enc);
+
+        //Insert the ID into the message
+      	int position = Character.getNumericValue(obj1.date.charAt(5));
+      	String encoded = enc.substring(0,position)+obj1.agentID+enc.substring(position,enc.length());
+      	System.out.println(encoded);
 
       }
   }
