@@ -1,6 +1,6 @@
 import java.util.ArrayList;
 
-class Main 
+class EncryptVIC extends VICOperations
 {
   public static String noCarryAddition (String t1, String t2)
   {
