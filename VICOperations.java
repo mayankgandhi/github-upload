@@ -88,7 +88,7 @@ public class VICOperations
 					break;
 				else
 				{
-					if(perm1.charAt(i)!=' ')
+					if(Character.isLetter(perm1.charAt(i)))
 					{
 						perm+=Character.toString(perm1.charAt(i));
 						count--;
@@ -100,11 +100,8 @@ public class VICOperations
 		{
 			perm=perm1;
 		}
-
-	//if the string is longer than 10, make it shorter
-
-
 		String arr=perm.toUpperCase();
+		System.out.println("Here is the string"+arr);
 		char arr1[]=arr.toCharArray();
 
 		int i=0, j=0;
